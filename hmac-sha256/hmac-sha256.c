@@ -30,7 +30,6 @@
 
 #include <stdint.h>
 #include <string.h>
-#include "config.h"
 #include "sha256.h"
 #include "hmac-sha256.h"
 

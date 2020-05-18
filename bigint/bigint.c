@@ -34,7 +34,10 @@
 #include <string.h>
 #include <stdio.h>
 
-#define PREFERE_HEAP_SPACE 1
+#define PREFERE_HEAP_SPACE 0
+#define E_PARAM -1;
+#define E_OOM   -2;
+#define E_VALUE -3;
 
 #if PREFERE_HEAP_SPACE
 #include <stdlib.h>
@@ -57,7 +60,7 @@
 
 #endif
 
-#define DEBUG 1
+#define DEBUG 0
 
 #if DEBUG
 #include "cli.h"
@@ -120,11 +123,37 @@ bigint_length_t bigint_length_B(const bigint_t *a){
 
 /******************************************************************************/
 
-int32_t bigint_get_first_set_bit(const bigint_t *a){
+/* int32_t bigint_get_first_set_bit(const bigint_t *a){
 	if(a->length_W == 0) {
 		return -1;
 	}
 	return (a->length_W-1) * sizeof(bigint_word_t) * CHAR_BIT + GET_FBS(a);
+} */
+
+int32_t bigint_get_first_set_bit(const bigint_t *a) {
+    bigint_length_t r;
+    bigint_word_t t;
+    if (!a) {
+        return (bigint_length_t)-1;
+    }
+    if (a->length_W == 0) {
+        return (bigint_length_t)-1;
+    }
+    r = a->length_W - 1;
+    while (r && a->wordv[r] == 0) {
+        --r;
+    }
+    t = a->wordv[r];
+    if (!t) {
+        return (bigint_length_t)-1;
+    }
+    r *= BIGINT_WORD_SIZE;
+    t >>= 1;
+    while (t) {
+        t >>= 1;
+        ++r;
+    }
+    return r;
 }
 
 
@@ -1281,19 +1310,4 @@ void bigint_expmod_u(bigint_t *dest, const bigint_t *a, const bigint_t *exp, con
         bigint_expmod_u_sam(dest, a, exp, r);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

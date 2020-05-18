@@ -207,7 +207,7 @@ void sha256_lastBlock(sha256_ctx_t *state, const void *block, uint16_t length){
 	    msg_len >>= 8;
 	} while (i--);
 #elif defined BIG_ENDIAN
-	*((uint64_t)&(lb[56])) = state->length;
+	*((uint64_t*)&(lb[56])) = state->length;
 #endif
 	sha256_nextBlock(state, lb);
 }
