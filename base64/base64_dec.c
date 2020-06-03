@@ -28,7 +28,7 @@
 #include <stdint.h>
 #include "base64_dec.h"
 
-#include "cli.h"
+//#include "cli.h"
 
 /*
  #define USE_GCC_EXTENSION
